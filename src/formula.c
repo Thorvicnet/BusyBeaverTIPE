@@ -23,6 +23,7 @@ uint8_t history_bit(const HistoryEntry *e, int64_t pos) {
   return (uint8_t)((e->tape_data[byte] >> (bit % 8)) & 1U);
 }
 
+// Returns the tape word of the requested width starting at a history position
 uint32_t history_word(const HistoryEntry *e, int64_t start, uint64_t len) {
   uint32_t word = 0;
   for (uint64_t i = 0; i < len; i++) {
@@ -36,6 +37,7 @@ int instruction_matches(Ins ins, ExpectedIns expected) {
          ins.state == expected.state;
 }
 
+// Returns whether the transition table exactly matches the expected instruction pattern
 int table_matches(Ins *table[2], const ExpectedIns expected[2][4]) {
   for (uint8_t read = 0; read <= 1; read++)
     for (uint8_t state = 1; state <= 3; state++)
@@ -44,6 +46,7 @@ int table_matches(Ins *table[2], const ExpectedIns expected[2][4]) {
   return 1;
 }
 
+// Returns whether the transition table matches one of the known binary counter machines
 int known_binary_counter(Ins *table[2]) {
   const ExpectedIns m369883[2][4] = {
       {{0, 0, 0}, {1, 1, 2}, {0, -1, 1}, {1, -1, 1}},
@@ -66,6 +69,7 @@ int known_binary_counter(Ins *table[2]) {
          table_matches(table, m644972) || table_matches(table, m6005773);
 }
 
+// Checks whether the machine history admits a regular invariant at the given word width
 int regular_invariant_for_width(const History *h, Ins *table[2],
                                 uint64_t width) {
   uint64_t words = 1ULL << width;
@@ -141,6 +145,7 @@ int regular_invariant_for_width(const History *h, Ins *table[2],
   return 1;
 }
 
+// Returns whether any supported odd word width yields a regular invariant for the machine history
 int regular_invariant(const History *h, Ins *table[2]) {
   for (uint64_t width = REGULAR_MIN_WIDTH; width <= REGULAR_MAX_WIDTH;
        width += 2) {
