@@ -14,3 +14,4 @@ make
 - `tape.c` : gère le ruban.
 - `drift.c` : détecte les cas cycler exacte et cycler translaté.
 - `formula.c` : possède les 4 compteurs binaires et l'invariant régulier.
+- `bouncer.c` : vérifie les certificats bouncer pompés.

@@ -102,6 +102,7 @@ int main(void) {
   uint64_t positive_drift = 0;
   uint64_t negative_drift = 0;
   uint64_t formula = 0;
+  uint64_t bouncer = 0;
   uint64_t unknown = 0;
   uint64_t skipped_symmetric = 0;
   uint64_t classified_unique = 0;
@@ -158,6 +159,11 @@ int main(void) {
         fprintf(log_file, "id=%llu,type=formula,ref=%llu\n",
                 (unsigned long long)id, (unsigned long long)id);
         break;
+      case LOOP_TYPE_BOUNCER:
+        bouncer++;
+        fprintf(log_file, "id=%llu,type=bouncer,ref=%llu\n",
+                (unsigned long long)id, (unsigned long long)id);
+        break;
       }
       break;
     case MACHINE_RESULT_TYPE_UNKNOWN:
@@ -178,6 +184,7 @@ int main(void) {
   printf("Positive drift: %llu\n", (unsigned long long)positive_drift);
   printf("Negative drift: %llu\n", (unsigned long long)negative_drift);
   printf("Formula: %llu\n", (unsigned long long)formula);
+  printf("Bouncer: %llu\n", (unsigned long long)bouncer);
   printf("Unknown: %llu\n\n", (unsigned long long)unknown);
 
   printf("\nbb3: %llu\n", (unsigned long long)bb3);

@@ -1,4 +1,5 @@
 #include "beaver.h"
+#include "bouncer.h"
 #include "drift.h"
 #include "formula.h"
 #include "encoding.h"
@@ -54,6 +55,14 @@ MachineResult run_machine(Ins *table[2]) {
       break;
     }
 
+    LoopType bouncer = bouncer_detect_loop(&history, table);
+    if (bouncer != LOOP_TYPE_NONE) {
+      result = (MachineResult){.type = MACHINE_RESULT_TYPE_NONHALT_LOOP,
+                               .loop = bouncer,
+                               .steps = steps};
+      break;
+    }
+
     if (reachable_states_avoid_halt_from(table, b.state)) {
       result = (MachineResult){.type = MACHINE_RESULT_TYPE_NONHALT_LOOP,
                                .loop = LOOP_TYPE_FORMULA,
@@ -74,6 +83,8 @@ MachineResult run_machine(Ins *table[2]) {
     }
 
     LoopType loop = history_detect_loop(&history, MAX_PERIOD);
+    if (loop == LOOP_TYPE_NONE && steps == STEP_LIMIT)
+      loop = bouncer_detect_loop(&history, table);
     if (loop == LOOP_TYPE_NONE &&
         (steps == STEP_LIMIT || steps % 4 == 0))
       loop = formula_detect_loop(&history, table, MAX_PERIOD);
@@ -116,6 +127,9 @@ void print_result(MachineResult result) {
       break;
     case LOOP_TYPE_FORMULA:
       loop = "formula";
+      break;
+    case LOOP_TYPE_BOUNCER:
+      loop = "bouncer";
       break;
     default:
       break;

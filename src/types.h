@@ -35,7 +35,8 @@ typedef enum {
   LOOP_TYPE_EXACT = 1,
   LOOP_TYPE_DRIFT_POSITIVE = 2,
   LOOP_TYPE_DRIFT_NEGATIVE = 3,
-  LOOP_TYPE_FORMULA = 4
+  LOOP_TYPE_FORMULA = 4,
+  LOOP_TYPE_BOUNCER = 5
 } LoopType;
 
 typedef enum {
